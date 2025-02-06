@@ -44,4 +44,14 @@ Route::get('/dashboard/settings', [App\Http\Controllers\DashboardSettingControll
 Route::get('/dashboard/account', [App\Http\Controllers\DashboardSettingController::class, 'account'])
     ->name('dashboard-settings-account');
 
+// Admin
+// ->middleware(['auth', 'admin'])
+Route::prefix('admin')
+    ->name('Admin')
+    ->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])
+            ->name('admin-dashboard');
+        Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
+    });
+
 Auth::routes();
