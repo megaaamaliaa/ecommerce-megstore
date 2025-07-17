@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Category
+    User
 @endsection
 
 @section('content')
@@ -10,9 +10,9 @@
         <div class="container-fluid">
         <!-- dashboard heading -->
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Category</h2>
+                <h2 class="dashboard-title">User</h2>
                 <p class="dashboard-subtitle">
-                List of Categories
+                List of User
                 </p>
             </div>
         <!-- dashboard content -->
@@ -21,8 +21,8 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <a href="{{ route('Admincategory.create') }}" class="btn btn-primary mb-3">
-                                    + Create New Category
+                                <a href="{{ route('Adminuser.create') }}" class="btn btn-primary mb-3">
+                                    + Create New User
                                 </a>
                                 <div class="table-responsive">
                                     <table class="table table-hover scroll-horizontal-vertical w-100" id="crudTable">
@@ -30,8 +30,8 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Photo</th>
-                                                <th>Slug</th>
+                                                <th>Email</th>
+                                                <th>Roles</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -48,19 +48,21 @@
 @endsection
 
 @push('addon-script')
+    <!-- DataTables -->
     <script>
         var datatable = $('#crudTable').DataTable({
             processing: true,
             serverSide: true,
             ordering: true,
             ajax: {
+                //konfigurasi ajax untuk mengambil data dari url
                 url: '{!! url()->current() !!}',
             },
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
-                {data: 'photo', name: 'photo'},
-                {data: 'slug', name: 'slug'},
+                {data: 'email', name: 'email'},
+                {data: 'roles', name: 'roles'},
                 {
                     data: 'action',
                     name: 'action',

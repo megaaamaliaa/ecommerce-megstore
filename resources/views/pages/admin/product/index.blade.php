@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Category
+    Product
 @endsection
 
 @section('content')
@@ -10,9 +10,9 @@
         <div class="container-fluid">
         <!-- dashboard heading -->
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Category</h2>
+                <h2 class="dashboard-title">Product</h2>
                 <p class="dashboard-subtitle">
-                List of Categories
+                List of Product
                 </p>
             </div>
         <!-- dashboard content -->
@@ -21,8 +21,8 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <a href="{{ route('Admincategory.create') }}" class="btn btn-primary mb-3">
-                                    + Create New Category
+                                <a href="{{ route('Adminproduct.create') }}" class="btn btn-primary mb-3">
+                                    + Create New Product
                                 </a>
                                 <div class="table-responsive">
                                     <table class="table table-hover scroll-horizontal-vertical w-100" id="crudTable">
@@ -30,8 +30,9 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Photo</th>
-                                                <th>Slug</th>
+                                                <th>Pemilik</th>
+                                                <th>Kategori</th>
+                                                <th>Harga</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -48,19 +49,22 @@
 @endsection
 
 @push('addon-script')
+    <!-- DataTables -->
     <script>
         var datatable = $('#crudTable').DataTable({
             processing: true,
             serverSide: true,
             ordering: true,
             ajax: {
+                //konfigurasi ajax untuk mengambil data dari url
                 url: '{!! url()->current() !!}',
             },
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
-                {data: 'photo', name: 'photo'},
-                {data: 'slug', name: 'slug'},
+                {data: 'user.name', name: 'user.name'}, //titik adalah relasi
+                {data: 'category.name', name: 'category.name'},
+                {data: 'price', name: 'price'},
                 {
                     data: 'action',
                     name: 'action',
