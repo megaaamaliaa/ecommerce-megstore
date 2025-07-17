@@ -120,20 +120,24 @@
           </div>
           <div class="row">
              @php
-                $incrementCategory = 0;
+                $incrementProduct = 0;
             @endphp
             @forelse ($products as $product)
               <div
                 class="col-6 col-md-4 col-lg-3"
                 data-aos="fade-up"
-                data-aos-delay="100"
+                data-aos-delay="{{ $incrementProduct+=100 }}"
               >
                 <a href="{{ route('detail', $product->slug) }}" class="component-products d-block">
                   <div class="pruducts-thumbnail">
                     <div
                       class="products-image"
                       style="
-                        background-image: url('{{ Storage::url($product->galleries->first()->photos) }}');
+                        @if ($product->galleries->count())
+                          background-image: url('{{ Storage::url($product->galleries->first()->photos) }}')
+                        @else
+                          background-color: #eee
+                        @endif
                       "
                     ></div>
                   </div>
