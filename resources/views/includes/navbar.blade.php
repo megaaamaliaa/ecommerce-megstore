@@ -27,17 +27,62 @@
             <li class="nav-item">
                 <a class="nav-link" href="/beritaMobil.html">Rewards</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/aksesoris.html">Sign up</a>
-            </li>
-            <li class="nav-item">
-                <a
-                class="btn-success nav-link px-4 text-light d-inline-block"
-                href="/login.html"
-                >
-                Sign in
-                </a>
-            </li>
+            @guest
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">Sign up</a>
+                </li>
+                <li class="nav-item">
+                    <a
+                    class="btn-success nav-link px-4 text-light d-inline-block"
+                    href="{{ route('login') }}"
+                    >
+                    Sign in
+                    </a>
+                </li>
+            @endguest
+
+            @auth
+            <!-- desktop menu -->
+                <ul class="navbar-nav d-none d-lg-flex">
+                    <li class="nav-item dropdown">
+                    <a href="#" class="nav-link" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        <img src="/images/iconuser.png" alt="" class="rounded-circle mr-2 profile-picture" >
+                        Hi, {{ Auth::user()->name }}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{{ route('dashboard') }}" class="dropdown-item"> Dashboard</a>
+                        <a href="{{ route('dashboard-settings-account') }}" class="dropdown-item"> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();" class="dropdown-item">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-inline-block mt-2">
+                        <img src="/images/cartkosong.svg" alt="">
+                        </a>
+                    </li>
+                    </li>
+                </ul>
+
+                <!-- mobile menu -->
+                <ul class="navbar-nav d-block d-lg-none">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        Hi, Mega
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="#" class="nav-link d-inline-block">
+                        Cart
+                        </a>
+                    </li>
+                </ul>
+            @endauth
             </ul>
         </div>
     </div>

@@ -11,18 +11,59 @@
                 <div class="col-lg-4">
                     <h2>Memulai untuk jual beli,<br>
                         dengan cara terbaru</h2>
-                    <form action="" class="mt-3">
+                    <form method="POST" action="{{ route('register') }}" class="mt-3">
+                        @csrf
                         <div class="form-group">
                             <label for="fullname">Full Name</label>
-                            <input type="text" name="fullname" id="fullname" class="form-control is-valid" v-model="name" autofocus >
+                            <input id="name"
+                            type="text"
+                            class="form-control @error('name') is-invalid @enderror"
+                            name="name" value="{{ old('name') }}" required autocomplete="name" autofocus v-model="name">
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="" id="email" class="form-control is-invalid" v-model="email" autofocus >
+                            <input id="email"
+                            v-model="email"
+                            type="email"
+                            class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="" id="password" class="form-control">
+                            <input id="password"
+                            type="password"
+                            class="form-control @error('password') is-invalid @enderror"
+                            name="password" required autocomplete="new-password">
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Konfirmasi Password</label>
+                            <input id="password-confirm"
+                            type="password"
+                            class="form-control @error('password_confirmation') is-invalid @enderror"
+                            name="password_confirmation" required autocomplete="new-password">
+
+                                @error('password_confirmation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                         </div>
                         <div class="form-group">
                             <label>Store</label>
@@ -41,17 +82,32 @@
                             </div>
                         </div>
                         <div class="form-group" v-if="is_store_open">
-                            <label for="nameStore">Nama Toko</label>
-                            <input type="text" name="nameStore" id="nameStore" class="form-control">
+                            <label for="store_name">Nama Toko</label>
+                            <input type="text"
+                            v-model="store_name" :value="store"
+                            name="store_name" id="store_name"
+                            class="form-control @error('store_name') is-invalid @enderror"
+                            required
+                            autocomplete
+                            autofocus>
+
+                             @error('store_name')
+                                 <span class="invalid-feedback" role="alert">
+                                     <strong>{{ $message }}</strong>
+                                 </span>
+                             @enderror
                         </div>
                         <div class="form-group" v-if="is_store_open">
-                            <label for="kategori">Kategori</label>
-                            <select name="kategori" id="kategori" class="form-control">
+                            <label for="categories_id">Kategori</label>
+                            <select name="categories_id" id="categories_id" class="form-control">
                              <option value="" disabled>Select Category</option>
+                             @foreach ($categories as $category)
+                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
+                             @endforeach
                             </select>
                         </div>
-                        <a href="/dashboard.html" class="btn btn-success btn-block mt-4">Sign Up Now</a>
-                        <a href="/login.html" class="btn btn-signup btn-block mt-4">Back to Sign In</a>
+                        <button type="Submit" class="btn btn-success btn-block mt-4">Sign Up Now</button>
+                        <a href="{{ route('login') }}" class="btn btn-signup btn-block mt-4">Back to Sign In</a>
                     </form>
                 </div>
             </div>
@@ -145,14 +201,14 @@
         el:'#register',
         mounted() {
           AOS.init();
-          this.$toasted.error(
-            "Maaf, tampaknya email sudah terdaftar pada sistem kami.",
-            {
-              position:"top-center",
-              className:"rounded",
-              duration: 1000,
-            }
-          );
+        //   this.$toasted.error(
+        //     "Maaf, tampaknya email sudah terdaftar pada sistem kami.",
+        //     {
+        //       position:"top-center",
+        //       className:"rounded",
+        //       duration: 1000,
+        //     }
+        //   );
         },
         data : {
           name:"Mega",
