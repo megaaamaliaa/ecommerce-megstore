@@ -9275,6 +9275,8 @@ footer p {
 }
 .page-details .store-gallery .thumbnail-image:hover, .page-details .store-gallery .thumbnail-image.active {
   border: 2px solid #ff7158;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .page-details .store-heading {
   margin-bottom: 10px;

@@ -20,6 +20,8 @@
             &:hover,
             &.active {
                 border: 2px solid #ff7158;
+                object-fit: cover;
+
             }
         }
     }
@@ -62,7 +64,7 @@
     }
 
     .store-review{
-        
+
         .media{
             align-items: center;
             img{

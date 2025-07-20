@@ -28,11 +28,18 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input id="email"
-                            v-model="email"
-                            type="email"
-                            class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
+                            <input
+                                v-model="email"
+                                @change="checkForEmailAvailability()"
+                                id="email"
+                                type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                :class="{ 'is-invalid': this.email_unavailable }"
+                                name="email"
+                                value="{{ old('email') }}"
+                                required
+                                autocomplete="email"
+                            >
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -84,11 +91,11 @@
                         <div class="form-group" v-if="is_store_open">
                             <label for="store_name">Nama Toko</label>
                             <input type="text"
-                            v-model="store_name" :value="store"
+                            v-model="store_name"
                             name="store_name" id="store_name"
                             class="form-control @error('store_name') is-invalid @enderror"
                             required
-                            autocomplete
+                            autocomplete="store_name"
                             autofocus>
 
                              @error('store_name')
@@ -100,14 +107,22 @@
                         <div class="form-group" v-if="is_store_open">
                             <label for="categories_id">Kategori</label>
                             <select name="categories_id" id="categories_id" class="form-control">
-                             <option value="" disabled>Select Category</option>
+                             <option value="categories_id" disabled>Select Category</option>
                              @foreach ($categories as $category)
                                  <option value="{{ $category->id }}">{{ $category->name }}</option>
                              @endforeach
                             </select>
                         </div>
-                        <button type="Submit" class="btn btn-success btn-block mt-4">Sign Up Now</button>
-                        <a href="{{ route('login') }}" class="btn btn-signup btn-block mt-4">Back to Sign In</a>
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-block mt-4"
+                            :disabled="this.email_unavailable"
+                        >
+                            Sign Up Now
+                        </button>
+                        <a href="{{ route('login') }}" class="btn btn-signup btn-block mt-2">
+                            Back to Sign In
+                        </a>
                     </form>
                 </div>
             </div>
@@ -195,6 +210,7 @@
     <script src="/vendor/vue/vue.js"></script>
     <!-- Insert the vue core before vue-toasted -->
     <script src="https://unpkg.com/vue-toasted"></script>
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
     <script>
       Vue.use(Toasted);
       var register = new Vue({
@@ -210,12 +226,50 @@
         //     }
         //   );
         },
-        data : {
-          name:"Mega",
-          email:"email@gmail.com",
-          password:"",
-          is_store_open:true,
-          store_name:""
+        methods: {
+            checkForEmailAvailability: function () {
+                var self = this;
+                axios.get('{{ route('api-register-check') }}', {
+                        params: {
+                            email: this.email
+                        }
+                    })
+                    .then(function (response) {
+                        if(response.data == 'Available') {
+                            self.$toasted.show(
+                                "Email anda tersedia! Silahkan lanjut langkah selanjutnya!", {
+                                    position: "top-center",
+                                    className: "rounded",
+                                    duration: 1000,
+                                }
+                            );
+                            self.email_unavailable = false;
+                        } else {
+                            self.$toasted.error(
+                                "Maaf, tampaknya email sudah terdaftar pada sistem kami.", {
+                                    position: "top-center",
+                                    className: "rounded",
+                                    duration: 1000,
+                                }
+                            );
+                            self.email_unavailable = true;
+                        }
+                        // handle success
+                        console.log(response.data);
+                    })
+            }
+        },
+
+        data () {
+            return{
+                name:"Mega",
+                email:"email@gmail.com",
+                password:"",
+                is_store_open:true,
+                store_name:"",
+                email_unavailable:false
+            }
+
         }
       })
     </script>

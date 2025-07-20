@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -96,5 +98,12 @@ class RegisterController extends Controller
     public function success()
     {
         return view('auth.success');
+    }
+
+    public function check(Request $request)
+    {
+        // Check if the email already exists in the database
+        return User::where('email', $request->email)->count() > 0 ? 'Unavailable' : 'Available';
+        // return User::where('email', $request->email)->count() > 0
     }
 }
